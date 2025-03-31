@@ -1,4 +1,14 @@
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "client/build"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Type = "text/javascript"
+
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+  from = "/*"
+  to = "/index.html"
+  status = 200
