@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { Network } from "vis-network";
 
-const TripGraph = ({ places = [], restaurants = [], hotels = [] }) => {
+const TripGraph = ({ selectedTrip }) => {
   const graphRef = useRef(null);
 
   useEffect(() => {
-    if (!graphRef.current) return;
+    if (!graphRef.current || !selectedTrip) return;
+
+    const { trip_sequence, places = [], restaurants = [], hotels = [] } = selectedTrip;
 
     // Function to get correct image for each type
     const getImage = (type) => {
@@ -17,37 +19,52 @@ const TripGraph = ({ places = [], restaurants = [], hotels = [] }) => {
         case "hotel":
           return "/icons/hotel.png"; // Hotel icon
         default:
-          return "/icons/default.png"; // Default icon
+          return "/icons/default.png";
       }
     };
 
-    // Prepare nodes with unique IDs and images
-    const allLocations = [
-      ...places.map((name, i) => ({
-        id: `p-${i}`,
-        label: name,
-        image: getImage("place"),
-        shape: "image", // Set shape as image
-        size: 40, // Increase size for better visibility
-        font: { size: 18, bold: true },
-      })),
-      ...restaurants.map((name, i) => ({
-        id: `r-${i}`,
-        label: name,
-        image: getImage("restaurant"),
+    // Generate nodes based on trip_sequence or default order
+    let allLocations = [];
+
+    if (trip_sequence && trip_sequence.length > 0) {
+      // If trip_sequence exists, use it directly
+      allLocations = trip_sequence.map((item, i) => ({
+        id: `ts-${i}`,
+        label: item.name,
+        image: getImage(item.type),
         shape: "image",
-        size: 40,
-        font: { size: 18, bold: true },
-      })),
-      ...hotels.map((name, i) => ({
-        id: `h-${i}`,
-        label: name,
-        image: getImage("hotel"),
-        shape: "image",
-        size: 40,
-        font: { size: 18, bold: true },
-      })),
-    ];
+        size: 30,
+        font: { size: 10, bold: true },
+      }));
+    } else {
+      // Default order: places → hotels → restaurants
+      allLocations = [
+        ...places.map((name, i) => ({
+          id: `p-${i}`,
+          label: name,
+          image: getImage("place"),
+          shape: "image",
+          size: 30,
+          font: { size: 10, bold: true },
+        })),
+        ...hotels.map((name, i) => ({
+          id: `h-${i}`,
+          label: name,
+          image: getImage("hotel"),
+          shape: "image",
+          size: 30,
+          font: { size: 10, bold: true },
+        })),
+        ...restaurants.map((name, i) => ({
+          id: `r-${i}`,
+          label: name,
+          image: getImage("restaurant"),
+          shape: "image",
+          size: 30,
+          font: { size: 10, bold: true },
+        })),
+      ];
+    }
 
     // Create edges connecting sequential locations
     const edges = allLocations
@@ -67,7 +84,7 @@ const TripGraph = ({ places = [], restaurants = [], hotels = [] }) => {
 
     // Render graph
     new Network(graphRef.current, graphData, options);
-  }, [places, restaurants, hotels]);
+  }, [selectedTrip]);
 
   return (
     <div>

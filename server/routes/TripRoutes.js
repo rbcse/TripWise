@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllPlaces , getAllHotels , createTrip , getUserTrips, addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip } from "../controllers/TripController.js";
+import { getAllPlaces , getAllHotels , createTrip , getUserTrips, addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence } from "../controllers/TripController.js";
 
 const tripRouter = express.Router();
 
@@ -19,5 +19,6 @@ tripRouter.post("/remove-restaurant",removeRestaurant);
 tripRouter.get("/:tripId/restaurants",fetchTripRestaurantsById);
 tripRouter.post("/user-trips",getAllUserTrips);
 tripRouter.post("/cancel-trip",cancelTrip);
+tripRouter.post("/add-trip-sequence",setTripSequence);
 
 export default tripRouter;

@@ -19,6 +19,16 @@ class AdminService{
         return await Places.find();
     }
 
+    static async updateHotel(hotel){
+        return Hotels.findByIdAndUpdate(hotel._id,hotel);
+    }
+    static async updatePlace(place){
+        return Places.findByIdAndUpdate(place._id,place);
+    }
+    static async updateRestaurant(restaurant){
+        return Restaurants.findByIdAndUpdate(restaurant._id,restaurant);
+    }
+
 };
 
 export default AdminService;

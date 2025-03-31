@@ -2,6 +2,9 @@ import { useState } from "react";
 import AddPlaceForm from "./AddPlace";
 import AddHotelForm from "./AddHotel";
 import AddRestaurantForm from "./AddRestaurant";
+import SeeHotels from "./SeeHotels";
+import SeePlaces from "./SeePlaces";
+import SeeRestaurants from "./SeeRestaurants";
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState("addPlace");
@@ -14,7 +17,7 @@ const AdminDashboard = () => {
                     <span className="text-[#f2b50d]">Trip</span>
                     <span className="text-black">Wise</span> Admin
                 </h2>
-                <ul>
+                <ul className="flex flex-col gap-3">
                     <li
                         className={`cursor-pointer p-3 text-lg rounded-lg ${
                             activeTab === "addPlace" ? "bg-[#f2b50d] text-black" : "text-gray-700"
@@ -24,7 +27,7 @@ const AdminDashboard = () => {
                         Add Place
                     </li>
                     <li
-                        className={`cursor-pointer p-3 mt-4 text-lg rounded-lg ${
+                        className={`cursor-pointer p-3 text-lg rounded-lg ${
                             activeTab === "addHotel" ? "bg-[#f2b50d] text-black" : "text-gray-700"
                         } hover:bg-yellow-300`}
                         onClick={() => setActiveTab("addHotel")}
@@ -32,12 +35,36 @@ const AdminDashboard = () => {
                         Add Hotel
                     </li>
                     <li
-                        className={`cursor-pointer p-3 mt-4 text-lg rounded-lg ${
+                        className={`cursor-pointer p-3 text-lg rounded-lg ${
                             activeTab === "addRestaurant" ? "bg-[#f2b50d] text-black" : "text-gray-700"
                         } hover:bg-yellow-300`}
                         onClick={() => setActiveTab("addRestaurant")}
                     >
                         Add Restaurant
+                    </li>
+                    <li
+                        className={`cursor-pointer p-3 text-lg rounded-lg ${
+                            activeTab === "seeHotels" ? "bg-[#f2b50d] text-black" : "text-gray-700"
+                        } hover:bg-yellow-300`}
+                        onClick={() => setActiveTab("seeHotels")}
+                    >
+                        See Hotels
+                    </li>
+                    <li
+                        className={`cursor-pointer p-3 text-lg rounded-lg ${
+                            activeTab === "seePlaces" ? "bg-[#f2b50d] text-black" : "text-gray-700"
+                        } hover:bg-yellow-300`}
+                        onClick={() => setActiveTab("seePlaces")}
+                    >
+                        See Places
+                    </li>
+                    <li
+                        className={`cursor-pointer p-3 text-lg rounded-lg ${
+                            activeTab === "seeRestaurants" ? "bg-[#f2b50d] text-black" : "text-gray-700"
+                        } hover:bg-yellow-300`}
+                        onClick={() => setActiveTab("seeRestaurants")}
+                    >
+                        See Restaurants
                     </li>
                 </ul>
             </div>
@@ -47,6 +74,9 @@ const AdminDashboard = () => {
                 {activeTab === "addPlace" && <AddPlaceForm />}
                 {activeTab === "addHotel" && <AddHotelForm />}
                 {activeTab === "addRestaurant" && <AddRestaurantForm />}
+                {activeTab === "seeHotels" && <SeeHotels />}
+                {activeTab === "seePlaces" && <SeePlaces />}
+                {activeTab === "seeRestaurants" && <SeeRestaurants />}
             </div>
         </div>
     );

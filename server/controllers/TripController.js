@@ -201,7 +201,6 @@ const getAllUserTrips = async (req,res) => {
 }
 
 const cancelTrip = async (req,res) => {
-    console.log(req.body);
     try {
         const result = await TripService.deleteTrip(req.body.tripId);
         if(result){
@@ -215,4 +214,19 @@ const cancelTrip = async (req,res) => {
     }
 }
 
-export {getAllPlaces , getAllHotels , createTrip , getUserTrips , addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip};
+const setTripSequence = async(req,res) => {
+    try {
+        const result = await TripService.addTripSequence(req.body.tripId , req.body.tripSequence);
+        if(result){
+            return res.status(200).json({success : true});
+        }
+        else{
+            return res.status(404).json({success : false , error : "Something went wrong in adding trip Sequence"});
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({success : false , error: error});
+    }
+}
+
+export {getAllPlaces , getAllHotels , createTrip , getUserTrips , addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence};

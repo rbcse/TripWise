@@ -145,5 +145,48 @@ const addRestaurant = async (req, res) => {
     }
 };
 
+const updateHotel = async (req,res) => {
+    try {
+        const hotel = req.body;
+        const result = await AdminService.updateHotel(hotel);
+        if(result){
+            return res.status(200).json({ success: true});
+        }
+        else{
+            return res.status(200).json({ success: false});
+        }
+    } catch (error) {
+        return res.status(200).json({ success: false , error : error});
+    }
+}
+const updatePlace = async (req,res) => {
+    try {
+        const place = req.body;
+        const result = await AdminService.updatePlace(place);
+        if(result){
+            return res.status(200).json({ success: true});
+        }
+        else{
+            return res.status(200).json({ success: false});
+        }
+    } catch (error) {
+        return res.status(200).json({ success: false , error : error});
+    }
+}
+const updateRestaurant = async (req,res) => {
+    try {
+        const restaurant = req.body;
+        const result = await AdminService.updateRestaurant(restaurant);
+        if(result){
+            return res.status(200).json({ success: true});
+        }
+        else{
+            return res.status(200).json({ success: false});
+        }
+    } catch (error) {
+        return res.status(200).json({ success: false , error : error});
+    }
+}
 
-export {adminLogin , addPlace , addHotel , addRestaurant};
+
+export {adminLogin , addPlace , addHotel , addRestaurant , updateHotel , updatePlace , updateRestaurant};

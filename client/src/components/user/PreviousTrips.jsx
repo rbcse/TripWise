@@ -1,6 +1,6 @@
 const PreviousTrips = (props) => {
     const today = new Date().toISOString().split("T")[0];
-    const prevTrips = props.userTrips.filter(trip => trip.date_of_arrival.split("T")[0] < today);
+    const prevTrips = props.userTrips.filter(trip => trip.date_of_return.split("T")[0] < today);
   
     return (
       <div className="p-6">

@@ -16,6 +16,7 @@ const Profile = () => {
   const [showUpcoming, setShowUpcoming] = useState(false);
   const [userTrips, setUserTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [tripDetails, setTripDetails] = useState({
     user_id: tokenData.id,
     trip_name: "",
@@ -49,34 +50,28 @@ const Profile = () => {
       toast.error("Return date is required!");
       return false;
     }
-
     const arrivalDate = new Date(tripDetails.date_of_arrival);
     const returnDate = new Date(tripDetails.date_of_return);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
     if (arrivalDate < today) {
       toast.error("Date of arrival cannot be in the past!");
       return false;
     }
-
     if (returnDate < arrivalDate) {
       toast.error("Return date cannot be before arrival date!");
       return false;
     }
-
     return true;
   };
 
   const createTrip = async () => {
     if (!validateTrip()) return;
-
     setIsLoading(true);
-
     try {
       await axios.post(`${BACKEND_URL}/trip/add-destination`, tripDetails);
       toast.success("Trip created successfully!");
-      fetchAllTrips(); // Refresh trip list
+      fetchAllTrips();
     } catch (error) {
       toast.error("Error creating trip. Please try again.");
     } finally {
@@ -88,30 +83,27 @@ const Profile = () => {
     <div>
       <Navbar />
       <ToastContainer />
+      <div className="flex flex-col md:flex-row h-screen mt-17">
+        <button
+          className="md:hidden mt-23 bg-gray-100 p-4 absolute top-4 right-4 rounded-md shadow-md"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? "Close Menu" : "Open Menu"}
+        </button>
 
-      <div className="flex h-screen mt-17">
-        <div className="w-1/4 bg-gray-100 flex flex-col gap-2 p-4">
-          <button
-            className="cursor-pointer w-full p-3 text-black font-[500] hover:bg-[#f2b50d] rounded-md"
-            onClick={() => { setShowForm(false); setShowUpcoming(false); }}
-          >
+        <div className={`md:w-1/5 bg-gray-100 p-4 ${menuOpen ? "block" : "hidden md:block"}`}>
+          <button className="w-full p-3 text-black font-medium hover:bg-[#f2b50d] rounded-md" onClick={() => { setShowForm(false); setShowUpcoming(false); }}>
             Previous Trips
           </button>
-          <button
-            className="cursor-pointer w-full p-3 text-black font-[500] hover:bg-[#f2b50d] rounded-md"
-            onClick={() => { setShowForm(true); setShowUpcoming(false); }}
-          >
+          <button className="w-full p-3 text-black font-medium hover:bg-[#f2b50d] rounded-md" onClick={() => { setShowForm(true); setShowUpcoming(false); }}>
             Create Trip
           </button>
-          <button
-            className="cursor-pointer w-full p-3 text-black font-[500] hover:bg-[#f2b50d] rounded-md"
-            onClick={() => { setShowForm(false); setShowUpcoming(true); }}
-          >
+          <button className="w-full p-3 text-black font-medium hover:bg-[#f2b50d] rounded-md" onClick={() => { setShowForm(false); setShowUpcoming(true); }}>
             Upcoming Trips
           </button>
         </div>
 
-        <div className="w-3/4 p-6">
+        <div className="md:w-3/4 p-6">
           {showForm ? (
             <div className="bg-white p-6 shadow-md rounded-md">
               <h2 className="text-3xl font-bold">
@@ -120,50 +112,18 @@ const Profile = () => {
               </h2>
               <div className="mt-4">
                 <label className="block mb-2 font-semibold">Trip Name</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  placeholder="Enter trip name"
-                  value={tripDetails.trip_name}
-                  onChange={(e) => setTripDetails({ ...tripDetails, trip_name: e.target.value })}
-                />
+                <input type="text" className="w-full p-2 border rounded-md" placeholder="Enter trip name" value={tripDetails.trip_name} onChange={(e) => setTripDetails({ ...tripDetails, trip_name: e.target.value })} />
               </div>
               <div className="mt-4">
                 <label className="block mb-2 font-semibold">Date of Arrival</label>
-                <input
-                  type="date"
-                  className="w-full p-2 border rounded-md"
-                  value={tripDetails.date_of_arrival}
-                  onChange={(e) => setTripDetails({ ...tripDetails, date_of_arrival: e.target.value })}
-                />
+                <input type="date" className="w-full p-2 border rounded-md" value={tripDetails.date_of_arrival} onChange={(e) => setTripDetails({ ...tripDetails, date_of_arrival: e.target.value })} />
               </div>
               <div className="mt-4">
                 <label className="block mb-2 font-semibold">Return Date</label>
-                <input
-                  type="date"
-                  className="w-full p-2 border rounded-md"
-                  value={tripDetails.date_of_return}
-                  onChange={(e) => setTripDetails({ ...tripDetails, date_of_return: e.target.value })}
-                />
+                <input type="date" className="w-full p-2 border rounded-md" value={tripDetails.date_of_return} onChange={(e) => setTripDetails({ ...tripDetails, date_of_return: e.target.value })} />
               </div>
-              <button
-                className={`mt-4 p-3 text-black bg-[#f2b50d] rounded-md w-full flex justify-center font-[500] items-center ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
-                onClick={createTrip}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <svg
-                    className="animate-spin h-5 w-5 mr-2 text-white"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4l-3 3-3-3h4z"></path>
-                  </svg>
-                ) : (
-                  "Create Trip"
-                )}
+              <button className={`mt-4 p-3 text-black bg-[#f2b50d] rounded-md w-full font-medium ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`} onClick={createTrip} disabled={isLoading}>
+                {isLoading ? "Loading..." : "Create Trip"}
               </button>
             </div>
           ) : showUpcoming ? (

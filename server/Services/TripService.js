@@ -79,6 +79,14 @@ class TripService{
 
     static async deleteTrip(tripId) {
         return await Trip.findByIdAndDelete(tripId);
+    }   
+    
+    static async addTripSequence(tripId, tripSequence) {
+        return await Trip.findByIdAndUpdate(
+            tripId,
+            { $set: { trip_sequence: tripSequence } }, 
+            { new: true }
+        );
     }    
     
 };
