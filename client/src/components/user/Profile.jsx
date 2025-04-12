@@ -27,9 +27,9 @@ const Profile = () => {
   const fetchAllTrips = async () => {
     try {
       const response = await axios.post(`${BACKEND_URL}/trip/user-trips`, { user_id: tokenData.id });
-      setUserTrips(response.data.userTrips);
+      setUserTrips(response.data.userTrips);  
     } catch (error) {
-      toast.error("Error fetching trips");
+      toast.error(error);
     }
   };
 
@@ -83,22 +83,16 @@ const Profile = () => {
     <div>
       <Navbar />
       <ToastContainer />
-      <div className="flex flex-col md:flex-row h-screen mt-17">
-        <button
-          className="md:hidden mt-23 bg-gray-100 p-4 absolute top-4 right-4 rounded-md shadow-md"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? "Close Menu" : "Open Menu"}
-        </button>
+      <div className="flex flex-col md:flex-row h-screen mt-17 md:mt-13">
 
-        <div className={`md:w-1/5 bg-gray-100 p-4 ${menuOpen ? "block" : "hidden md:block"}`}>
-          <button className="w-full p-3 text-black font-medium hover:bg-[#f2b50d] rounded-md" onClick={() => { setShowForm(false); setShowUpcoming(false); }}>
+        <div className='flex justify-center items-center mt-4 md:flex-col md:w-1/5 md:bg-gray-100'>
+          <button className="w-full p-3 text-black text-[13px] md:text-[16px] font-medium hover:bg-[#f2b50d] rounded-md cursor-pointer" onClick={() => { setShowForm(false); setShowUpcoming(false); }}>
             Previous Trips
           </button>
-          <button className="w-full p-3 text-black font-medium hover:bg-[#f2b50d] rounded-md" onClick={() => { setShowForm(true); setShowUpcoming(false); }}>
+          <button className="w-full p-3 text-black text-[13px] md:text-[16px]  font-medium hover:bg-[#f2b50d] rounded-md cursor-pointer" onClick={() => { setShowForm(true); setShowUpcoming(false); }}>
             Create Trip
           </button>
-          <button className="w-full p-3 text-black font-medium hover:bg-[#f2b50d] rounded-md" onClick={() => { setShowForm(false); setShowUpcoming(true); }}>
+          <button className="w-full p-3 text-black text-[13px] md:text-[16px]  font-medium hover:bg-[#f2b50d] rounded-md cursor-pointer" onClick={() => { setShowForm(false); setShowUpcoming(true); }}>
             Upcoming Trips
           </button>
         </div>

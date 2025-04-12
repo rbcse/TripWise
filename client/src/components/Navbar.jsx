@@ -70,7 +70,7 @@ const Navbar = () => {
                             <a href="/login" className="text-gray-700 hover:text-gray-900">Login</a>
                         )}
 
-                        <a href="/plan-trip" className="bg-[#f2b50d] px-4 py-2 rounded-[10px] font-[500]">Plan Trips</a>
+                        <a href="/plan-trip" className="bg-[#f2b50d] px-4 py-2 rounded-[10px] font-[500]">See destinations</a>
                     </div>
 
                     <button onClick={toggleMenu} className="md:hidden text-gray-700 focus:outline-none">
@@ -120,7 +120,7 @@ const Navbar = () => {
                             ) : (
                                 <a href="/login" className="text-gray-700 hover:text-gray-900 text-lg">Login</a>
                             )}
-                            <a href="/plan-trip" className="bg-[#f2b50d] px-6 py-2 rounded-[10px] font-[500]">Plan Trips</a>
+                            <a href="/plan-trip" className="bg-[#f2b50d] px-6 py-2 rounded-[10px] font-[500]">See destinations</a>
                         </div>
                     </motion.div>
                 )}

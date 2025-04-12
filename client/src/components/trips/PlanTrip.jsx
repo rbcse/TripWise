@@ -17,12 +17,18 @@ const PlanTrip = () => {
 
     const BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     const token = localStorage.getItem("token");
-    const tokenData = jwtDecode(token);
+    let tokenData;
+    if(!token){
+        navigate("/login");
+    }
+    else{
+        tokenData = jwtDecode(token);
+    }
 
     const getUserTrips = async () => {
         try {
             const response = await axios.post(`${BACKEND_URL}/trip/get-user-trips`, { user_id: tokenData.id });
-            setUserTrips(response.data.userTrips); // Store trips in state
+            setUserTrips(response.data.userTrips); 
         } catch (error) {
             console.log(error);
         }
