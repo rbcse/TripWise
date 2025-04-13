@@ -6,36 +6,47 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpcomingTrips from "./UpcomingTrips";
 import PreviousTrips from "./PreviousTrips";
+import { useNavigate } from "react-router";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
-  const tokenData = jwtDecode(token);
+  const navigate = useNavigate();
   const BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
+  const [tokenData, setTokenData] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showUpcoming, setShowUpcoming] = useState(false);
   const [userTrips, setUserTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [tripDetails, setTripDetails] = useState({
-    user_id: tokenData.id,
+    user_id: "",
     trip_name: "",
     date_of_arrival: "",
     date_of_return: ""
   });
 
-  const fetchAllTrips = async () => {
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      const decoded = jwtDecode(token);
+      setTokenData(decoded);
+      setTripDetails(prev => ({
+        ...prev,
+        user_id: decoded.id
+      }));
+      fetchAllTrips(decoded.id);
+    }
+  }, [token]);
+
+  const fetchAllTrips = async (userId) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/trip/user-trips`, { user_id: tokenData.id });
+      const response = await axios.post(`${BACKEND_URL}/trip/user-trips`, { user_id: userId });
       setUserTrips(response.data.userTrips);  
     } catch (error) {
-      toast.error(error);
+      toast.error("Failed to fetch trips.");
     }
   };
-
-  useEffect(() => {
-    fetchAllTrips();
-  }, []);
 
   const validateTrip = () => {
     if (!tripDetails.trip_name.trim()) {
@@ -69,9 +80,11 @@ const Profile = () => {
     if (!validateTrip()) return;
     setIsLoading(true);
     try {
-      await axios.post(`${BACKEND_URL}/trip/add-destination`, tripDetails);
-      toast.success("Trip created successfully!");
-      fetchAllTrips();
+      const response = await axios.post(`${BACKEND_URL}/trip/add-destination`, tripDetails);
+      if(response.data.success){
+        toast.success("Trip created successfully!");
+      }     
+      fetchAllTrips(tripDetails.user_id);
     } catch (error) {
       toast.error("Error creating trip. Please try again.");
     } finally {
@@ -82,9 +95,7 @@ const Profile = () => {
   return (
     <div>
       <Navbar />
-      <ToastContainer />
       <div className="flex flex-col md:flex-row h-screen mt-17 md:mt-13">
-
         <div className='flex justify-center items-center mt-4 md:flex-col md:w-1/5 md:bg-gray-100'>
           <button className="w-full p-3 text-black text-[13px] md:text-[16px] font-medium hover:bg-[#f2b50d] rounded-md cursor-pointer" onClick={() => { setShowForm(false); setShowUpcoming(false); }}>
             Previous Trips
@@ -119,9 +130,10 @@ const Profile = () => {
               <button className={`mt-4 p-3 text-black bg-[#f2b50d] rounded-md w-full font-medium ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`} onClick={createTrip} disabled={isLoading}>
                 {isLoading ? "Loading..." : "Create Trip"}
               </button>
+              <ToastContainer />
             </div>
           ) : showUpcoming ? (
-            <UpcomingTrips userTrips={userTrips} />
+            <UpcomingTrips userTrips={userTrips} refreshTrips={() => fetchAllTrips(tokenData.id)} />
           ) : (
             <PreviousTrips userTrips={userTrips} />
           )}

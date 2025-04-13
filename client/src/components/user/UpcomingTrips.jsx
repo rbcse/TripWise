@@ -25,7 +25,7 @@ const UpcomingTrips = (props) => {
             const response = await axios.post(`${BACKEND_URL}/trip/cancel-trip`, { tripId });
             if (response.data.success) {
                 toast.success("Trip Deleted Successfully");
-                setTrips(prevTrips => prevTrips.filter(trip => trip._id !== tripId));
+                props.refreshTrips(); // Refresh the trip list from backend
             } else {
                 toast.error("Something went wrong");
             }
@@ -33,6 +33,7 @@ const UpcomingTrips = (props) => {
             toast.error("Error deleting trip");
         }
     };
+
 
     const openMap = (trip) => {
         setSelectedTrip(trip);
@@ -52,6 +53,14 @@ const UpcomingTrips = (props) => {
         setShowGraph(false);
         setShowMap(false);
     };
+
+    const handleCloseSequence = async (shouldRefresh) => {
+        setSequence(false);
+        if (shouldRefresh) {
+            await props.refreshTrips(); 
+        }
+    };
+    
 
     return (
         <div className="p-4 sm:p-6">
@@ -76,19 +85,19 @@ const UpcomingTrips = (props) => {
                                 <span className="font-semibold">Restaurants:</span> {trip.restaurants?.join(", ") || "No restaurants added"}
                             </div>
                             <div className="flex flex-wrap justify-center sm:justify-between items-center gap-3 sm:gap-7 mt-3">
-                                <button className="bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                <button className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
                                     onClick={() => openSeqMap(trip)}>
                                     {trip.trip_sequence ? "Update Sequence" : "Set Sequence"}
                                 </button>
-                                <button className="bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                <button className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
                                     onClick={() => openMap(trip)}>
                                     See Map
                                 </button>
-                                <button className="bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                <button className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
                                     onClick={() => openGraph(trip)}>
                                     Trip Graph
                                 </button>
-                                <button className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                <button className="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
                                     onClick={() => cancelTrip(trip._id)}>
                                     Cancel Trip
                                 </button>
@@ -98,9 +107,39 @@ const UpcomingTrips = (props) => {
                 ))
             )}
 
-            {showMap && selectedTrip && <AddToMap places={selectedTrip.places} restaurants={selectedTrip.restaurants} hotels={selectedTrip.hotels} />}
-            {showGraph && selectedTrip && <TripGraph selectedTrip={selectedTrip} />}
-            {sequence && selectedTrip && <TripSequence trip={selectedTrip} onClose={() => setSequence(false)} />}
+            {showMap && selectedTrip && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 max-w-5xl w-full relative animate-fade-in-up">
+                        <button
+                            onClick={() => setShowMap(false)}
+                            className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl font-bold"
+                        >
+                            ×
+                        </button>
+                        <AddToMap
+                            places={selectedTrip.places}
+                            restaurants={selectedTrip.restaurants}
+                            hotels={selectedTrip.hotels}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {showGraph && selectedTrip && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 max-w-3xl w-full relative animate-fade-in-up">
+                        <button
+                            onClick={() => setShowGraph(false)}
+                            className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl font-bold"
+                        >
+                            ×
+                        </button>
+                        <TripGraph selectedTrip={selectedTrip} />
+                    </div>
+                </div>
+            )}
+
+            {sequence && selectedTrip && <TripSequence trip={selectedTrip} onClose={handleCloseSequence} />}
             <ToastContainer />
         </div>
     );

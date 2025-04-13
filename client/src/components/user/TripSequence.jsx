@@ -32,10 +32,13 @@ const TripSequence = ({ trip, onClose }) => {
     }, [trip_sequence, forceRender]);
 
     const handleDateChange = (index, event) => {
-        const selectedDate = event.target.value;
-        setSelectedDates(prev => ({ ...prev, [index]: selectedDate }));
-
-        if (selectedDate < date_of_arrival || selectedDate > date_of_return) {
+        const selectedDate = new Date(event.target.value);
+        const arrival = new Date(date_of_arrival);
+        const departure = new Date(date_of_return);
+    
+        setSelectedDates(prev => ({ ...prev, [index]: event.target.value }));
+    
+        if (selectedDate < arrival || selectedDate > departure) {
             setDateErrors(prev => ({ ...prev, [index]: "Selected date is out of trip range!" }));
         } else {
             setDateErrors(prev => {
@@ -45,6 +48,7 @@ const TripSequence = ({ trip, onClose }) => {
             });
         }
     };
+    
 
     const handleDestinationChange = (index, event) => {
         setSelectedDestinations(prev => ({ ...prev, [index]: event.target.value }));
@@ -117,10 +121,10 @@ const TripSequence = ({ trip, onClose }) => {
                         >
                             Submit
                         </button>
+                        <ToastContainer />
                     </div>
                 </div>
             </div>
-            <ToastContainer />
         </div>
     );
 };

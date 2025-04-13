@@ -4,12 +4,14 @@ import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { jwtDecode } from "jwt-decode";
 import { motion, AnimatePresence } from "framer-motion";
 import dummyImg from '../assets/user.png';
+import { useNavigate } from "react-router";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [user, setUser] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [userImg , setUserImg] = useState(dummyImg);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -31,7 +33,7 @@ const Navbar = () => {
     const handleLogout = () => {
         localStorage.removeItem("token");
         setUser(null);
-        window.location.reload(); 
+        navigate("/");
     };
 
     return (
