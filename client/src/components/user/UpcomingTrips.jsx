@@ -7,7 +7,9 @@ import TripGraph from "./TripGraph";
 import TripSequence from "./TripSequence";
 
 const UpcomingTrips = (props) => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const [trips, setTrips] = useState(props.userTrips);
     const [selectedTrip, setSelectedTrip] = useState(null);
     const [showMap, setShowMap] = useState(false);
@@ -25,7 +27,7 @@ const UpcomingTrips = (props) => {
             const response = await axios.post(`${BACKEND_URL}/trip/cancel-trip`, { tripId });
             if (response.data.success) {
                 toast.success("Trip Deleted Successfully");
-                props.refreshTrips(); // Refresh the trip list from backend
+                props.refreshTrips();
             } else {
                 toast.error("Something went wrong");
             }
@@ -33,7 +35,6 @@ const UpcomingTrips = (props) => {
             toast.error("Error deleting trip");
         }
     };
-
 
     const openMap = (trip) => {
         setSelectedTrip(trip);
@@ -57,22 +58,29 @@ const UpcomingTrips = (props) => {
     const handleCloseSequence = async (shouldRefresh) => {
         setSequence(false);
         if (shouldRefresh) {
-            await props.refreshTrips(); 
+            await props.refreshTrips();
         }
     };
-    
+
+    const upcomingTrips = trips.filter(trip => {
+        const arrival = new Date(trip.date_of_arrival);
+        arrival.setHours(0, 0, 0, 0);
+        return arrival > today;
+    });
 
     return (
         <div className="p-4 sm:p-6">
             <h2 className="text-2xl font-bold mb-4 text-center sm:text-left">Upcoming Trips</h2>
-            {trips.filter(trip => trip.date_of_arrival >= today).length === 0 ? (
+            {upcomingTrips.length === 0 ? (
                 <p className="text-gray-500 text-center">No upcoming trips found.</p>
             ) : (
-                trips.map(trip => (
+                upcomingTrips.map(trip => (
                     <div key={trip._id} className="mb-6 border border-gray-300 rounded-lg shadow-md overflow-hidden">
                         <div className="bg-[#f2b50d] p-4 flex flex-col sm:flex-row justify-between items-center font-semibold text-lg">
                             <span className="text-gray-800 text-center sm:text-left">{trip.trip_name}</span>
-                            <span className="text-gray-600 text-center sm:text-right">{trip.date_of_arrival.split("T")[0]} - {trip.date_of_return.split("T")[0]}</span>
+                            <span className="text-gray-600 text-center sm:text-right">
+                                {trip.date_of_arrival.split("T")[0]} - {trip.date_of_return.split("T")[0]}
+                            </span>
                         </div>
                         <div className="p-4 space-y-2">
                             <div className="text-gray-700">
@@ -85,20 +93,28 @@ const UpcomingTrips = (props) => {
                                 <span className="font-semibold">Restaurants:</span> {trip.restaurants?.join(", ") || "No restaurants added"}
                             </div>
                             <div className="flex flex-wrap justify-center sm:justify-between items-center gap-3 sm:gap-7 mt-3">
-                                <button className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
-                                    onClick={() => openSeqMap(trip)}>
+                                <button
+                                    className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                    onClick={() => openSeqMap(trip)}
+                                >
                                     {trip.trip_sequence ? "Update Sequence" : "Set Sequence"}
                                 </button>
-                                <button className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
-                                    onClick={() => openMap(trip)}>
+                                <button
+                                    className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                    onClick={() => openMap(trip)}
+                                >
                                     See Map
                                 </button>
-                                <button className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
-                                    onClick={() => openGraph(trip)}>
+                                <button
+                                    className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                    onClick={() => openGraph(trip)}
+                                >
                                     Trip Graph
                                 </button>
-                                <button className="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
-                                    onClick={() => cancelTrip(trip._id)}>
+                                <button
+                                    className="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"
+                                    onClick={() => cancelTrip(trip._id)}
+                                >
                                     Cancel Trip
                                 </button>
                             </div>

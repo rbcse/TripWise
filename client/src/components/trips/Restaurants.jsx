@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Restaurants = ({ searchInput, selectedTrip }) => {
@@ -42,6 +42,10 @@ const Restaurants = ({ searchInput, selectedTrip }) => {
     };
 
     const addRestaurant = async (restaurantName, restaurantLocation) => {
+        if (!selectedTrip) {
+            toast.error("Please select a trip first!");
+            return;
+        }
         const trip_id = selectedTrip.value;
         const restaurantString = `${restaurantName}, ${restaurantLocation}`;
         const tripData = { trip_id, restaurant: restaurantString };
@@ -127,6 +131,7 @@ const Restaurants = ({ searchInput, selectedTrip }) => {
                     );
                 })}
             </div>
+            <ToastContainer/>
         </div>
     );
 };

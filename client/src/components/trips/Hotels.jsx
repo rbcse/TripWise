@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Hotels = ({ searchInput, selectedTrip }) => {
@@ -41,7 +41,7 @@ const Hotels = ({ searchInput, selectedTrip }) => {
 
     const addHotel = async (hotelName, hotelLocation) => {
         if (!selectedTrip?.value) {
-            toast.error("No trip selected!");
+            toast.error("Please select a trip first!");
             return;
         }
     
@@ -135,6 +135,7 @@ const Hotels = ({ searchInput, selectedTrip }) => {
             ) : (
                 <p className="text-center text-gray-500 col-span-full">No hotels found</p>
             )}
+            <ToastContainer/>
         </div>
     );
 };

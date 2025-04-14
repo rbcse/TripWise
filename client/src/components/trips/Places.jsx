@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ReadMore from "./ReadMore";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Places = ({ searchInput, selectedTrip }) => {
     const [allPlaces, setAllPlaces] = useState([]);
     const [places, setPlaces] = useState([]);
-    const [addedPlaces, setAddedPlaces] = useState(new Set()); // Track added places for selected trip
+    const [addedPlaces, setAddedPlaces] = useState(new Set()); 
     const BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     const navigate = useNavigate();
 
     useEffect(() => {
         if (selectedTrip?.value) {
-            fetchTripPlaces(selectedTrip.value); // Fetch places for selected trip
+            fetchTripPlaces(selectedTrip.value); 
         }
         fetchPlaces();
     }, [selectedTrip]);
@@ -43,19 +43,25 @@ const Places = ({ searchInput, selectedTrip }) => {
     };
 
     const addPlaces = async (placeName, placeLocation) => {
+        if (!selectedTrip) {
+            toast.error("Please select a trip first!");
+            return;
+        }
+    
         const trip_id = selectedTrip.value;
         const placeString = `${placeName}, ${placeLocation}`;
         const tripData = { trip_id, place: placeString };
-
+    
         try {
             await axios.post(`${BACKEND_URL}/trip/add-place`, tripData);
-            setAddedPlaces((prev) => new Set(prev).add(placeString)); // Add to Set
+            setAddedPlaces((prev) => new Set(prev).add(placeString));
             toast.success("Place added to trip!");
         } catch (error) {
             console.error(error);
             toast.error("Failed to add place.");
         }
     };
+    
 
     const removePlace = async (placeName, placeLocation) => {
         const trip_id = selectedTrip.value;
@@ -106,21 +112,21 @@ const Places = ({ searchInput, selectedTrip }) => {
                                 <button
                                     className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 w-auto"
                                     onClick={() => navigate("/readmore", { state: { place } })}
-                                >
+                                    >
                                     Read More
                                 </button>
                                 <button
                                     className={`cursor-pointer px-4 py-2 rounded-lg w-auto ${
                                         isAdded
-                                            ? "bg-red-500 text-white hover:bg-red-700"
-                                            : "bg-[#f2b50d] text-black hover:bg-yellow-500"
+                                        ? "bg-red-500 text-white hover:bg-red-700"
+                                        : "bg-[#f2b50d] text-black hover:bg-yellow-500"
                                     }`}
                                     onClick={() =>
                                         isAdded
-                                            ? removePlace(place.name, place.location)
-                                            : addPlaces(place.name, place.location)
+                                        ? removePlace(place.name, place.location)
+                                        : addPlaces(place.name, place.location)
                                     }
-                                >
+                                    >
                                     {isAdded ? "Remove" : "Add to Trip"}
                                 </button>
                             </div>
@@ -130,6 +136,7 @@ const Places = ({ searchInput, selectedTrip }) => {
             ) : (
                 <p className="text-center text-gray-500 col-span-full">No places found</p>
             )}
+        <ToastContainer/>
         </div>
     );
 };

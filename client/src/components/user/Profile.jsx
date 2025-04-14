@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpcomingTrips from "./UpcomingTrips";
 import PreviousTrips from "./PreviousTrips";
+import OngoingTrips from "./OngoingTrips";
 import { useNavigate } from "react-router";
 
 const Profile = () => {
@@ -18,6 +19,8 @@ const Profile = () => {
   const [showUpcoming, setShowUpcoming] = useState(false);
   const [userTrips, setUserTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showOngoing, setShowOngoing] = useState(false);
+  const [activeTab, setActiveTab] = useState('previous');
   const [tripDetails, setTripDetails] = useState({
     user_id: "",
     trip_name: "",
@@ -42,7 +45,7 @@ const Profile = () => {
   const fetchAllTrips = async (userId) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/trip/user-trips`, { user_id: userId });
-      setUserTrips(response.data.userTrips);  
+      setUserTrips(response.data.userTrips);
     } catch (error) {
       toast.error("Failed to fetch trips.");
     }
@@ -81,9 +84,9 @@ const Profile = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(`${BACKEND_URL}/trip/add-destination`, tripDetails);
-      if(response.data.success){
+      if (response.data.success) {
         toast.success("Trip created successfully!");
-      }     
+      }
       fetchAllTrips(tripDetails.user_id);
     } catch (error) {
       toast.error("Error creating trip. Please try again.");
@@ -97,13 +100,55 @@ const Profile = () => {
       <Navbar />
       <div className="flex flex-col md:flex-row h-screen mt-17 md:mt-13">
         <div className='flex justify-center items-center mt-4 md:flex-col md:w-1/5 md:bg-gray-100'>
-          <button className="w-full p-3 text-black text-[13px] md:text-[16px] font-medium hover:bg-[#f2b50d] rounded-md cursor-pointer" onClick={() => { setShowForm(false); setShowUpcoming(false); }}>
+          <button
+            className={`w-[25%] md:w-full p-3 text-black text-[13px] md:text-[16px] font-medium rounded-md cursor-pointer ${activeTab === 'previous' ? 'bg-[#f2b50d]' : 'hover:bg-[#f2b50d]'
+              }`}
+            onClick={() => {
+              setActiveTab('previous');
+              setShowForm(false);
+              setShowUpcoming(false);
+              setShowOngoing(false);
+            }}
+          >
             Previous Trips
           </button>
-          <button className="w-full p-3 text-black text-[13px] md:text-[16px]  font-medium hover:bg-[#f2b50d] rounded-md cursor-pointer" onClick={() => { setShowForm(true); setShowUpcoming(false); }}>
+
+          <button
+            className={`w-[20%] md:w-full p-3 text-black text-[13px] md:text-[16px] font-medium rounded-md cursor-pointer ${activeTab === 'create' ? 'bg-[#f2b50d]' : 'hover:bg-[#f2b50d]'
+              }`}
+            onClick={() => {
+              setActiveTab('create');
+              setShowForm(true);
+              setShowUpcoming(false);
+              setShowOngoing(false);
+            }}
+          >
             Create Trip
           </button>
-          <button className="w-full p-3 text-black text-[13px] md:text-[16px]  font-medium hover:bg-[#f2b50d] rounded-md cursor-pointer" onClick={() => { setShowForm(false); setShowUpcoming(true); }}>
+
+          <button
+            className={`w-[25%] md:w-full p-3 text-black text-[13px] md:text-[16px] font-medium rounded-md cursor-pointer ${activeTab === 'ongoing' ? 'bg-[#f2b50d]' : 'hover:bg-[#f2b50d]'
+              }`}
+            onClick={() => {
+              setActiveTab('ongoing');
+              setShowForm(false);
+              setShowUpcoming(false);
+              setShowOngoing(true);
+            }}
+          >
+            Ongoing Trips
+          </button>
+
+          <button
+            className={`w-[25%] md:w-full p-3 text-black text-[13px] md:text-[16px] font-medium rounded-md cursor-pointer ${activeTab === 'upcoming' ? 'bg-[#f2b50d]' : 'hover:bg-[#f2b50d]'
+              }`}
+            onClick={() => {
+              setActiveTab('upcoming');
+              setShowForm(false);
+              setShowUpcoming(true);
+              setShowOngoing(false);
+            }}
+          >
             Upcoming Trips
           </button>
         </div>
@@ -134,6 +179,8 @@ const Profile = () => {
             </div>
           ) : showUpcoming ? (
             <UpcomingTrips userTrips={userTrips} refreshTrips={() => fetchAllTrips(tokenData.id)} />
+          ) : showOngoing ? (
+            <OngoingTrips userTrips={userTrips} refreshTrips={() => fetchAllTrips(tokenData.id)} />
           ) : (
             <PreviousTrips userTrips={userTrips} />
           )}
