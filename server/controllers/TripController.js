@@ -46,7 +46,9 @@ const getAllRestaurants = async (req , res) => {
 
 const createTrip = async (req,res) => {
     try {
+        // console.log(req.body);
         const result = await TripService.createTrip(req.body);
+        // console.log(result);
         if(result){
             return res.status(200).json({success : true});  
         }

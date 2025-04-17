@@ -40,6 +40,12 @@ const tripSchema = new mongoose.Schema({
             },
             date: {
                 type: Date
+            },
+            budget : {
+                type : Number,
+            },
+            expense : {
+                type : Number,
             }
         }
     ]

@@ -83,12 +83,15 @@ const Profile = () => {
     if (!validateTrip()) return;
     setIsLoading(true);
     try {
+      console.log("Trip Details" , tripDetails);
       const response = await axios.post(`${BACKEND_URL}/trip/add-destination`, tripDetails);
+      console.log(response);
       if (response.data.success) {
         toast.success("Trip created successfully!");
       }
       fetchAllTrips(tripDetails.user_id);
     } catch (error) {
+      console.log(error);
       toast.error("Error creating trip. Please try again.");
     } finally {
       setIsLoading(false);

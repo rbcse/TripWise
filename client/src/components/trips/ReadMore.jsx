@@ -95,7 +95,7 @@ const ReadMore = () => {
 
       {/* Review Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex justify-center items-center bg-black/50 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md relative">
             {/* Close Button */}
             <button 

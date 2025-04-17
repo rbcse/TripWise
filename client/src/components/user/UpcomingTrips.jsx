@@ -124,7 +124,7 @@ const UpcomingTrips = (props) => {
             )}
 
             {showMap && selectedTrip && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+                <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
                     <div className="bg-white rounded-2xl shadow-lg p-6 max-w-5xl w-full relative animate-fade-in-up">
                         <button
                             onClick={() => setShowMap(false)}
@@ -142,7 +142,7 @@ const UpcomingTrips = (props) => {
             )}
 
             {showGraph && selectedTrip && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+                <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
                     <div className="bg-white rounded-2xl shadow-lg p-6 max-w-3xl w-full relative animate-fade-in-up">
                         <button
                             onClick={() => setShowGraph(false)}
