@@ -1,0 +1,8 @@
+langchain_community
+python-dotenv
+langchain_groq
+faiss-cpu
+langchain_core
+langchain
+langchain_huggingface
+flask
