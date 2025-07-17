@@ -16,6 +16,20 @@ const getAllPlaces = async (req , res) => {
     }
 }
 
+const getAllReligiousPlaces = async (req , res) => {
+    try {
+        const result = await TripService.findAllReligiousPlaces();
+        if(result){
+            return res.status(200).json({success : true , places : result});
+        }
+        else{
+            return res.status(404).json({success : false , error: "Places not found"});
+        }
+    } catch (error) {
+        return res.status(400).json({success : false , error: error});
+    }
+}
+
 const getAllHotels = async (req , res) => {
     try {
         const result = await TripService.findAllHotels();
@@ -77,6 +91,19 @@ const getUserTrips = async (req,res) => {
 const addUserPlaces = async (req,res) => {
     try {
         const result = await TripService.addUserTripPlaces(req.body.trip_id , req.body.place);
+        if(result){
+            return res.status(200).json({success : true});
+        }
+        else{
+            return res.status(200).json({success : false , error : "Something went wrong"});
+        }
+    } catch (error) {
+        return res.status(400).json({success : false , error : error});
+    }
+}
+const addUserReligiousPlaces = async (req,res) => {
+    try {
+        const result = await TripService.addUserTripReligiousPlaces(req.body.trip_id , req.body.place);
         if(result){
             return res.status(200).json({success : true});
         }
@@ -231,4 +258,4 @@ const setTripSequence = async(req,res) => {
     }
 }
 
-export {getAllPlaces , getAllHotels , createTrip , getUserTrips , addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence};
+export {getAllPlaces , getAllHotels , createTrip , getUserTrips , addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence, getAllReligiousPlaces , addUserReligiousPlaces};

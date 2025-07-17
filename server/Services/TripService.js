@@ -2,11 +2,16 @@ import Places from "../models/PlaceModel.js";
 import Hotels from "../models/HotelModel.js";
 import Trip from "../models/TripModel.js";
 import Restaurants from "../models/RestaurantModel.js";
+import ReligiousPlace from "../models/ReligiousPlacesModel.js";
 
 class TripService{
 
     static async findAllPlaces(){
         return await Places.find();
+    }
+
+    static async findAllReligiousPlaces(){
+        return await ReligiousPlace.find();
     }
 
     static async findAllHotels(){
@@ -29,6 +34,14 @@ class TripService{
         return await Trip.findByIdAndUpdate(
             tripId, 
             { $addToSet: { places: place } }, 
+            { new: true } 
+        );
+    }    
+
+    static async addUserTripReligiousPlaces(tripId, place) {
+        return await Trip.findByIdAndUpdate(
+            tripId, 
+            { $addToSet: { religiousplaces: place } }, 
             { new: true } 
         );
     }    

@@ -5,7 +5,8 @@ import AddRestaurantForm from "./AddRestaurant";
 import SeeHotels from "./SeeHotels";
 import SeePlaces from "./SeePlaces";
 import SeeRestaurants from "./SeeRestaurants";
-
+import AddReligiousPlacesForm from "./AddReligiousPlaces";
+import SeeReligiousPlaces from "./SeeReligiousPlaces";
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState("addPlace");
 
@@ -44,6 +45,14 @@ const AdminDashboard = () => {
                     </li>
                     <li
                         className={`cursor-pointer p-3 text-lg rounded-lg ${
+                            activeTab === "addReligiousPlace" ? "bg-[#f2b50d] text-black" : "text-gray-700"
+                        } hover:bg-yellow-300`}
+                        onClick={() => setActiveTab("addReligiousPlace")}
+                    >
+                        Add Religious Place
+                    </li>
+                    <li
+                        className={`cursor-pointer p-3 text-lg rounded-lg ${
                             activeTab === "seeHotels" ? "bg-[#f2b50d] text-black" : "text-gray-700"
                         } hover:bg-yellow-300`}
                         onClick={() => setActiveTab("seeHotels")}
@@ -66,6 +75,14 @@ const AdminDashboard = () => {
                     >
                         See Restaurants
                     </li>
+                    <li
+                        className={`cursor-pointer p-3 text-lg rounded-lg ${
+                            activeTab === "seeReligiousPlaces" ? "bg-[#f2b50d] text-black" : "text-gray-700"
+                        } hover:bg-yellow-300`}
+                        onClick={() => setActiveTab("seeReligiousPlaces")}
+                    >
+                        See Religious Places
+                    </li>
                 </ul>
             </div>
 
@@ -74,9 +91,11 @@ const AdminDashboard = () => {
                 {activeTab === "addPlace" && <AddPlaceForm />}
                 {activeTab === "addHotel" && <AddHotelForm />}
                 {activeTab === "addRestaurant" && <AddRestaurantForm />}
+                {activeTab === "addReligiousPlace" && <AddReligiousPlacesForm />}
                 {activeTab === "seeHotels" && <SeeHotels />}
                 {activeTab === "seePlaces" && <SeePlaces />}
                 {activeTab === "seeRestaurants" && <SeeRestaurants />}
+                {activeTab === "seeReligiousPlaces" && <SeeReligiousPlaces />}
             </div>
         </div>
     );

@@ -92,6 +92,9 @@ const UpcomingTrips = (props) => {
                             <div className="text-gray-700">
                                 <span className="font-semibold">Restaurants:</span> {trip.restaurants?.join(", ") || "No restaurants added"}
                             </div>
+                            <div className="text-gray-700">
+                                <span className="font-semibold">Religious Places:</span> {trip.religiousplaces?.join(", ") || "No restaurants added"}
+                            </div>
                             <div className="flex flex-wrap justify-center sm:justify-between items-center gap-3 sm:gap-7 mt-3">
                                 <button
                                     className="cursor-pointer bg-[#f2b50d] text-black px-4 py-2 rounded-lg font-semibold shadow-md w-full sm:w-auto"

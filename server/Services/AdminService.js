@@ -1,6 +1,7 @@
 import Places from "../models/PlaceModel.js";
 import Hotels from "../models/HotelModel.js";
 import Restaurants from "../models/RestaurantModel.js";
+import ReligiousPlace from "../models/ReligiousPlacesModel.js";
 
 class AdminService{
 
@@ -13,6 +14,10 @@ class AdminService{
 
     static async addRestaurant(restaurantData){
         return Restaurants.create(restaurantData);
+    }
+
+    static async addReligiousPlaces(placeData){
+        return ReligiousPlace.create(placeData);
     }
 
     static async findAllPlaces(){

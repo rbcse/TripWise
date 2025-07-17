@@ -19,6 +19,9 @@ const tripSchema = new mongoose.Schema({
     restaurants: [
         { type: String }
     ],
+    religiousplaces : [
+        {type : String}
+    ],
     date_of_arrival: {
         type: Date,
         required: true
@@ -31,7 +34,7 @@ const tripSchema = new mongoose.Schema({
         {
             type: {
                 type: String,
-                enum: ["place", "hotel", "restaurant"],
+                enum: ["place", "hotel", "restaurant","religiousplace"],
                 required: true
             },
             name: {

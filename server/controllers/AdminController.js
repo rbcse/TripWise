@@ -145,6 +145,42 @@ const addRestaurant = async (req, res) => {
     }
 };
 
+const addReligiousPlace = async (req,res) => {
+    try {
+        console.log(req.file);
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        const localFilePath = req.file.path; 
+        console.log("Local path" , localFilePath);
+
+        const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
+        if(cloudinaryResponse){
+            const placeData = {
+                name : req.body.name ,
+                location : req.body.location,
+                rating: req.body.rating,
+                image : cloudinaryResponse.url,
+                description : req.body.description
+            };
+
+            const addResult = await AdminService.addReligiousPlaces(placeData);
+            if(addResult){
+                return res.status(200).json({success : true , message : "Place added successfully"});
+            }
+            else{
+                return res.status(200).json({success : false , message : "Something went wrong , try again"});
+            }
+        }
+        else{
+            return res.status(404).json({success : false , message : "Please upload the image"});
+        }
+    } catch (error) {
+        console.log("Error:", error);
+    }
+}
+
 const updateHotel = async (req,res) => {
     try {
         const hotel = req.body;
@@ -189,4 +225,4 @@ const updateRestaurant = async (req,res) => {
 }
 
 
-export {adminLogin , addPlace , addHotel , addRestaurant , updateHotel , updatePlace , updateRestaurant};
+export {adminLogin , addPlace , addHotel , addRestaurant , updateHotel , updatePlace , updateRestaurant , addReligiousPlace};

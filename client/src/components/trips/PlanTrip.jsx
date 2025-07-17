@@ -7,6 +7,7 @@ import Restaurants from "./Restaurants";
 import Select from "react-select";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import ReligiousPlaces from "./ReligiousPlaces";
 
 const PlanTrip = () => {
     const navigate = useNavigate();
@@ -60,7 +61,7 @@ const PlanTrip = () => {
             <div className="flex flex-col md:flex-row justify-between items-center mt-20 p-2 w-3/4 mx-auto gap-4">
                 {/* Tab Navigation */}
                 <div className="flex gap-2 w-full">
-                    {["Places", "Hotels", "Restaurants"].map((tab) => (
+                    {["Places", "Hotels", "Restaurants" , "Religious Places"].map((tab) => (
                         <button
                             key={tab}
                             className={`px-6 py-2 rounded-md font-semibold text-gray-700 transition-all cursor-pointer focus:outline-none ${
@@ -145,6 +146,7 @@ const PlanTrip = () => {
                 {activeTab === "Places" && <Places searchInput={searchInput.value} selectedTrip={selectedTrip} />}
                 {activeTab === "Hotels" && <Hotels searchInput={searchInput.value} selectedTrip={selectedTrip} />}
                 {activeTab === "Restaurants" && <Restaurants searchInput={searchInput.value} selectedTrip={selectedTrip} />}
+                {activeTab === "Religious Places" && <ReligiousPlaces searchInput={searchInput.value} selectedTrip={selectedTrip} />}
             </div>
         </div>
     );
