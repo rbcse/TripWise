@@ -18,3 +18,6 @@ Welcome to Tripwise - An online Trip Planner
 4. **Trip Graph and Plot on Map** : I have used Recharts.js library  and Leaflet.js for the maps so that user can see the trip in a whole.
 
 5. **Feedback** : User can give feedback on the home page about tripwise. Please give feedbacks.
+
+6. **Image Gallery ** : User can see the respective images of the respective place , hotel , restaurant , religious place.
+
