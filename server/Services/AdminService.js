@@ -34,6 +34,31 @@ class AdminService{
         return Restaurants.findByIdAndUpdate(restaurant._id,restaurant);
     }
 
+    static async addImgReligiousPlacesGallery(religiousPlaceId, imageUrl) {
+        return ReligiousPlace.findByIdAndUpdate(
+            religiousPlaceId,
+            { $push: { image_gallery: imageUrl } }
+        );
+    }
+    static async addImgPlacesGallery(placeId, imageUrl) {
+        return Places.findByIdAndUpdate(
+            placeId,
+            { $push: { image_gallery: imageUrl } }
+        );
+    }
+    static async addImgHotelsGallery(hotelId, imageUrl) {
+        return Hotels.findByIdAndUpdate(
+            hotelId,
+            { $push: { image_gallery: imageUrl } }
+        );
+    }
+    static async addImgRestaurantsGallery(restaurantId, imageUrl) {
+        return Restaurants.findByIdAndUpdate(
+            restaurantId,
+            { $push: { image_gallery: imageUrl } }
+        );
+    }
+
 };
 
 export default AdminService;

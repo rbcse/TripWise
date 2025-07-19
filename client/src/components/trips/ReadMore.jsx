@@ -107,10 +107,10 @@ const ReadMore = () => {
         <div className="w-full mt-6">
           {activeTab === "gallery" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {[...Array(6)].map((_, i) => (
+              {place.image_gallery.map((_, i) => (
                 <img
                   key={i}
-                  src={place?.image}
+                  src={place.image_gallery[i]}
                   alt={`Gallery ${i}`}
                   className="w-full h-56 object-cover rounded-lg shadow-md"
                 />

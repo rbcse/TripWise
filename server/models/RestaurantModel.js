@@ -22,6 +22,9 @@ const restaurantSchema = new mongoose.Schema({
     },
     menu : {
         type : String
+    },
+    image_gallery : {
+        type : Array
     }
 });
 
