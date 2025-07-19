@@ -53,6 +53,13 @@ class TripService{
             { new: true }  
         );
     }
+    static async removeUserTripReligiousPlace(tripId, place) {
+        return await Trip.findByIdAndUpdate(
+            tripId, 
+            { $pull: { religiousplaces: place } },  
+            { new: true }  
+        );
+    }
 
     static async addUserTripHotels(tripId, hotel) {
         return await Trip.findByIdAndUpdate(

@@ -129,11 +129,34 @@ const removePlaces = async(req,res) => {
     }
 }
 
+const removeReligiousPlaces = async(req,res) => {
+    try {
+        const result = await TripService.removeUserTripReligiousPlace(req.body.trip_id , req.body.place);
+        if(result){
+            return res.status(200).json({success : true});
+        }
+        else{
+            return res.status(200).json({success : false , error : "Something went wrong"});
+        }
+    } catch (error) {
+        return res.status(400).json({success : false , error : error});
+    }
+}
+
 const fetchTripPlacesById = async(req,res) => {
     try {
         const {tripId} = req.params;
         const trip = await Trip.findById(tripId);
         return res.json({ places: trip?.places || [] });
+    } catch (error) {
+        return res.json({error : error});
+    }
+}
+const fetchTripReligiousPlacesById = async(req,res) => {
+    try {
+        const {tripId} = req.params;
+        const trip = await Trip.findById(tripId);
+        return res.json({ places: trip?.religiousplaces || [] });
     } catch (error) {
         return res.json({error : error});
     }
@@ -258,4 +281,4 @@ const setTripSequence = async(req,res) => {
     }
 }
 
-export {getAllPlaces , getAllHotels , createTrip , getUserTrips , addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence, getAllReligiousPlaces , addUserReligiousPlaces};
+export {getAllPlaces , getAllHotels , createTrip , getUserTrips , addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence, getAllReligiousPlaces , addUserReligiousPlaces , fetchTripReligiousPlacesById , removeReligiousPlaces};

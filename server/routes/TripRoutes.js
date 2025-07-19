@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllPlaces , getAllHotels , createTrip , getUserTrips, addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence , getAllReligiousPlaces , addUserReligiousPlaces } from "../controllers/TripController.js";
+import { getAllPlaces , getAllHotels , createTrip , getUserTrips, addUserPlaces , removePlaces , fetchTripPlacesById , addUserHotels , removeHotels , fetchTripHotelsById , getAllRestaurants , addUserRestaurants , removeRestaurant , fetchTripRestaurantsById , getAllUserTrips , cancelTrip , setTripSequence , getAllReligiousPlaces , addUserReligiousPlaces, fetchTripReligiousPlacesById , removeReligiousPlaces } from "../controllers/TripController.js";
 
 const tripRouter = express.Router();
 
@@ -11,7 +11,9 @@ tripRouter.post("/get-user-trips",getUserTrips);
 tripRouter.post("/add-place",addUserPlaces);
 tripRouter.post("/add-religious-place",addUserReligiousPlaces);
 tripRouter.post("/remove-place",removePlaces);
+tripRouter.post("/remove-religious-place",removeReligiousPlaces);
 tripRouter.get("/:tripId/places",fetchTripPlacesById);
+tripRouter.get("/:tripId/religious-places",fetchTripReligiousPlacesById);
 tripRouter.post("/add-hotel",addUserHotels);
 tripRouter.post("/remove-hotel",removeHotels);
 tripRouter.get("/:tripId/hotels",fetchTripHotelsById);

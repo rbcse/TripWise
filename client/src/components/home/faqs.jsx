@@ -39,36 +39,45 @@ const Faqs = () => {
 
     return (
         <div className='flex justify-center items-center w-full flex-col mb-7 px-5 md:px-10'>
-
             <h1 className='text-2xl md:text-3xl font-bold mb-5 text-center'>Frequently Asked Questions</h1>
 
             <div className='flex flex-col w-full md:w-[75%] lg:w-[60%]'>
-                {faqs.map((faq, index) => (
-                    <div key={index} className='mb-3 bg-white shadow-md p-4 rounded-lg'>
-                        <button
-                            className='w-full flex justify-between items-center text-left text-[16px] md:text-[18px] font-semibold'
-                            onClick={() => toggleFaq(index)}
+                {faqs.map((faq, index) => {
+                    const isOpen = openFaq === index;
+                    return (
+                        <div
+                            key={index}
+                            className={`mb-3 p-4 rounded-lg shadow-md transition-all duration-300 ${
+                                isOpen ? 'bg-[#fbc531] text-black' : 'bg-white text-gray-800'
+                            }`}
                         >
-                            <span className='flex-1'>{faq.question}</span>
-                            <FontAwesomeIcon icon={openFaq === index ? faMinus : faPlus} className="text-gray-500 cursor-pointer" />
-                        </button>
-                        <AnimatePresence>
-                            {openFaq === index && (
-                                <motion.p
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: "auto" }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                                    className='mt-2 text-gray-700 text-sm md:text-base'
-                                >
-                                    {faq.answer}
-                                </motion.p>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                ))}
+                            <button
+                                className='w-full flex justify-between items-center text-left text-[16px] md:text-[18px] font-semibold'
+                                onClick={() => toggleFaq(index)}
+                            >
+                                <span className='flex-1'>{faq.question}</span>
+                                <FontAwesomeIcon
+                                    icon={isOpen ? faMinus : faPlus}
+                                    className="text-gray-600 cursor-pointer"
+                                />
+                            </button>
+                            <AnimatePresence>
+                                {isOpen && (
+                                    <motion.p
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        className='mt-2 text-sm md:text-base'
+                                    >
+                                        {faq.answer}
+                                    </motion.p>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    );
+                })}
             </div>
-
         </div>
     );
 };

@@ -33,7 +33,7 @@ const ReligiousPlaces = ({ searchInput, selectedTrip }) => {
 
     const fetchTripPlaces = async (tripId) => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/trip/${tripId}/places`);
+            const response = await axios.get(`${BACKEND_URL}/trip/${tripId}/religious-places`);
             if (response.data?.places) {
                 setAddedPlaces(new Set(response.data.places)); // Store added places
             }
@@ -69,7 +69,7 @@ const ReligiousPlaces = ({ searchInput, selectedTrip }) => {
         const tripData = { trip_id, place: placeString };
 
         try {
-            await axios.post(`${BACKEND_URL}/trip/remove-place`, tripData);
+            await axios.post(`${BACKEND_URL}/trip/remove-religious-place`, tripData);
             setAddedPlaces((prev) => {
                 const newSet = new Set(prev);
                 newSet.delete(placeString); // Remove from Set
